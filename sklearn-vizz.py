@@ -37,7 +37,7 @@ choice = st.sidebar.radio(
 
 st.write(f"## You Have Selected <font color='Gold'>{choice}</font> Option", unsafe_allow_html=True)
     
-if choice_name == 'Analysis':
+if choice == 'Analysis':
     st.write("## 1: Top 5 most voted CANDIDATE")
         
     max_voted_candidate = data.groupby('NAMA CALON')['BILANGAN'].sum()
