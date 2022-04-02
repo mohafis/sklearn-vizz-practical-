@@ -41,35 +41,29 @@ choice = st.sidebar.radio(
 
 st.write(f"## You Have Selected <font color='Gold'>{choice}</font> Option", unsafe_allow_html=True)
 
-def add_dataset_ui(choice_name):
-    X=[]
-    y=[]
-    X_names = []
-    X1 = []
-    
-        st.write("## 1: Top 5 most voted CANDIDATE")
+st.write("## 1: Top 5 most voted CANDIDATE")
         
-        max_voted_candidate = data.groupby('NAMA CALON')['BILANGAN'].sum()
-        max_voted_candidate = pd.DataFrame(max_voted_candidate)
-        max_voted_candidate = max_voted_candidate.sort_values(by= 'BILANGAN',ascending=False)
-        top5_max_voted_candidate = max_voted_candidate.head(5)
-        top5_max_voted_candidate = top5_max_voted_candidate.reset_index()
+max_voted_candidate = data.groupby('NAMA CALON')['BILANGAN'].sum()
+max_voted_candidate = pd.DataFrame(max_voted_candidate)
+max_voted_candidate = max_voted_candidate.sort_values(by= 'BILANGAN',ascending=False)
+top5_max_voted_candidate = max_voted_candidate.head(5)
+top5_max_voted_candidate = top5_max_voted_candidate.reset_index()
         
-        #top5_max_voted_candidate.keys()
-        top5_max_voted_candidate
+#top5_max_voted_candidate.keys()
+top5_max_voted_candidate
         
-        plt.figure(figsize = (12,5))
-        plt.bar(top5_max_voted_candidate['NAMA CALON'],top5_max_voted_candidate['BILANGAN'], color=[ '#00A19C', '#20419A', '#763F98', '#FDB924', '#BFD730'])
+plt.figure(figsize = (12,5))
+plt.bar(top5_max_voted_candidate['NAMA CALON'],top5_max_voted_candidate['BILANGAN'], color=[ '#00A19C', '#20419A', '#763F98', '#FDB924', '#BFD730'])
 
-        st.write("## 2: Top 5 most voted PARTY")
+st.write("## 2: Top 5 most voted PARTY")
+      
+max_voted_party = data.groupby('PARTI')['BILANGAN'].sum()
+max_voted_party = pd.DataFrame(max_voted_party)
+top5_max_voted_party = max_voted_party.sort_values(by= 'BILANGAN',ascending=False)
+top5_max_voted_party = top5_max_voted_party.head(5)
+top5_max_voted_party = top5_max_voted_party.reset_index()
         
-        max_voted_party = data.groupby('PARTI')['BILANGAN'].sum()
-        max_voted_party = pd.DataFrame(max_voted_party)
-        top5_max_voted_party = max_voted_party.sort_values(by= 'BILANGAN',ascending=False)
-        top5_max_voted_party = top5_max_voted_party.head(5)
-        top5_max_voted_party = top5_max_voted_party.reset_index()
-        
-        top5_max_voted_party
+top5_max_voted_party
 
-        plt.figure(figsize = (12,5))
-        plt.bar(top5_max_voted_party['PARTI'],top5_max_voted_party['BILANGAN'], color=[ '#00A19C', '#20419A', '#763F98', '#FDB924', '#BFD730'])
+plt.figure(figsize = (12,5))
+plt.bar(top5_max_voted_party['PARTI'],top5_max_voted_party['BILANGAN'], color=[ '#00A19C', '#20419A', '#763F98', '#FDB924', '#BFD730'])
