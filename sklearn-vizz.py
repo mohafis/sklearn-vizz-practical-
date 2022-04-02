@@ -17,10 +17,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 
 data = pd.read_csv("/mohafis/sklearn-vizz-practical-/blob/main/PRU14.csv")
-
-X = data.data
-y = data.target
-return X, y
     
 st.title('MALAYSIAN GENERAL ELECTION 14 ANALYSIS')
 
