@@ -18,6 +18,10 @@ from sklearn.metrics import classification_report
 
 data = pd.read_csv("https://github.com/mohafis/sklearn-vizz-practical-/blob/main/PRU14.csv")
 
+X = data.data
+y = data.target
+return X, y
+    
 st.title('MALAYSIAN GENERAL ELECTION 14 ANALYSIS')
 
 st.sidebar.write("""
@@ -37,25 +41,12 @@ choice = st.sidebar.radio(
 
 st.write(f"## You Have Selected <font color='Gold'>{choice}</font> Option", unsafe_allow_html=True)
 
-def get_default_dataset(name):
-    data = None
-    if name == 'Iris':
-        data = datasets.load_iris()
-    elif name == 'Wine':
-        data = datasets.load_wine()
-    else:
-        data = datasets.load_breast_cancer()
-    X = data.data
-    y = data.target
-    return X, y
-
 def add_dataset_ui(choice_name):
     X=[]
     y=[]
     X_names = []
     X1 = []
     
-    if choice_name == 'Analysis':
         st.write("## 1: Top 5 most voted CANDIDATE")
         
         max_voted_candidate = data.groupby('NAMA CALON')['BILANGAN'].sum()
@@ -82,125 +73,3 @@ def add_dataset_ui(choice_name):
 
         plt.figure(figsize = (12,5))
         plt.bar(top5_max_voted_party['PARTI'],top5_max_voted_party['BILANGAN'], color=[ '#00A19C', '#20419A', '#763F98', '#FDB924', '#BFD730'])
-
-    else:
-        classifier_name = st.sidebar.selectbox(
-        'Select classifier',
-        ('KNN', 'SVM', 'Random Forest')
-        )
-
-        test_data_ratio = st.sidebar.slider('Select testing size or ratio', 
-                                    min_value= 0.10, 
-                                    max_value = 0.50,
-                                    value=0.2)
-        random_state = st.sidebar.slider('Select random state', 1, 9999,value=1234)
-
-        st.write("## 1: Summary (X variables)")
-
-        if len(X)==0:
-            st.write("<font color='Aquamarine'>Note: Predictors @ X variables have not been selected.</font>", unsafe_allow_html=True)
-        else:
-            st.write('Shape of predictors @ X variables :', X.shape)
-            st.write('Summary of predictors @ X variables:', pd.DataFrame(X).describe())
-
-        st.write("## 2: Summary (y variable)")
-
-        if len(y)==0:
-            st.write("<font color='Aquamarine'>Note: Label @ y variable has not been selected.</font>", unsafe_allow_html=True)
-        elif len(np.unique(y)) <5:
-            st.write('Number of classes:', len(np.unique(y)))
-
-        else: 
-            st.write("<font color='red'>Warning: System detects an unusual number of unique classes. Please make sure that the label @ y is a categorical variable. Ignore this warning message if you are sure that the y is a categorical variable.</font>", unsafe_allow_html=True)
-            st.write('Number of classes:', len(np.unique(y)))
-
-        def add_parameter_ui(clf_name):
-            params = dict()
-            if clf_name == 'SVM':
-            C = st.sidebar.slider('C', 0.01, 10.0,value=1.0)
-            params['C'] = C
-        elif clf_name == 'KNN':
-            K = st.sidebar.slider('K', 1, 15,value=5)
-            params['K'] = K
-        else:
-            max_depth = st.sidebar.slider('max_depth', 2, 15,value=5)
-            params['max_depth'] = max_depth
-            n_estimators = st.sidebar.slider('n_estimators', 1, 100,value=10)
-            params['n_estimators'] = n_estimators
-        return params
-
-        params = add_parameter_ui(classifier_name)
-
-        def get_classifier(clf_name, params):
-            clf = None
-        if clf_name == 'SVM':
-            clf = SVC(C=params['C'])
-        elif clf_name == 'KNN':
-            clf = KNeighborsClassifier(n_neighbors=params['K'])
-        else:
-            clf = clf = RandomForestClassifier(n_estimators=params['n_estimators'], 
-            max_depth=params['max_depth'], random_state=random_state)
-        return clf
-
-    clf = get_classifier(classifier_name, params)
-
-
-    st.write("## 3: Classification Report")
-
-    if len(X)!=0 and len(y)!=0: 
-        
-
-        if uploaded_file!=None:
-           
-           st.write(uploaded_file)
-           data = pd.read_csv(uploaded_file)
-      
-           y_name = st.sidebar.selectbox(
-                    'Select Label @ y variable',
-                    sorted(data)
-                    )
-
-           X_names = st.sidebar.multiselect(
-                     'Select Predictors @ X variables.',
-                     sorted(data),
-                     default = sorted(data)[1],
-                     help = "You may select more than one predictor"
-                     )
-
-           y = data.loc[:,y_name]
-           X = data.loc[:,X_names]
-           X1 = X.select_dtypes(include=['object'])
-        
-           X2 = X.select_dtypes(exclude=['object'])
-
-           if sorted(X1) != []:
-              X1 = X1.apply(LabelEncoder().fit_transform)
-              X = pd.concat([X2,X1],axis=1)
-
-           y = LabelEncoder().fit_transform(y)
-        else:
-           st.write(f"## <font color='Aquamarine'>Note: Please upload a CSV file to analyze the data.</font>", unsafe_allow_html=True)
-
-    return X,y, X_names, X1
-
-X, y , X_names, cat_var= add_dataset_ui (choice)
-
-
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_data_ratio, random_state=random_state)
-
-  scaler = StandardScaler()
-  X_train_scaled = scaler.fit_transform(X_train)
-  X_test_scaled = scaler.transform(X_test)    
-
-  clf.fit(X_train_scaled, y_train)
-  y_pred = clf.predict(X_test_scaled)
-
-
-  st.write('Classifier:',classifier_name)
-  st.write('Classification report:')
-  report = classification_report(y_test, y_pred,output_dict=True)
-  df = pd.DataFrame(report).transpose()
-  st.write(df)
-
-else: 
-   st.write("<font color='Aquamarine'>Note: No classification report generated.</font>", unsafe_allow_html=True)
