@@ -16,7 +16,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.metrics import classification_report
 
-data = pd.read_csv("https://github.com/mohafis/sklearn-vizz-practical-/blob/main/PRU14.csv")
+data = pd.read_csv("/mohafis/sklearn-vizz-practical-/blob/main/PRU14.csv")
     
 st.title('MALAYSIAN GENERAL ELECTION 14 ANALYSIS')
 
@@ -27,13 +27,6 @@ This is a web app practical to analyse the General Election 14 results by utiliz
 st.sidebar.write ("This analysis is produced by:")
 
 st.sidebar.write("<a href='https://www.linkedin.com/in/mohd-hafizzudin-ismail-92b15274/'>Mohd Hafizzudin Ismail aka mohafis</a>", unsafe_allow_html=True)
-
-
-choice = st.sidebar.radio(
-    "Choose between two option",   
-    ('Analysis', 'Machine Learning'),
-    index = 0
-    )
 
 st.write(f"## You Have Selected <font color='Gold'>{choice}</font> Option", unsafe_allow_html=True)
 
