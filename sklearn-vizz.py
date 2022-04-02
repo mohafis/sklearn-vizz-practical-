@@ -42,7 +42,7 @@ if choice == 'Analysis':
         
     max_voted_candidate = data.groupby('NAMA CALON')['BILANGAN UNDI'].sum()
     max_voted_candidate = pd.DataFrame(max_voted_candidate)
-    max_voted_candidate = max_voted_candidate.sort_values(by= 'BILANGAN',ascending=False)
+    max_voted_candidate = max_voted_candidate.sort_values(by= 'BILANGAN UNDI',ascending=False)
     top5_max_voted_candidate = max_voted_candidate.head(5)
     top5_max_voted_candidate = top5_max_voted_candidate.reset_index()
         
