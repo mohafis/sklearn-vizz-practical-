@@ -67,3 +67,4 @@ if choice_name == 'Analysis':
 
 
 else:
+    st.write("")
